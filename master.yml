@@ -1,4 +1,4 @@
-name: Deploy Laravel Project Updates
+name: Auto Deploy Laravel Project
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   web-deploy:
-    name: Deploy Updates
+    name: Deploy
     runs-on: ubuntu-latest
 
     steps: 
@@ -24,20 +24,21 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2' # Use the PHP version your Laravel project requires
+          php-version: '8.2'
           extensions: mbstring, bcmath, xml, curl, json, fileinfo, openssl
           tools: composer
 
-      # Step 4: Install Composer dependencies without overwriting existing
+      # Step 4: Install Composer dependencies
       - name: Install Dependencies
         run: composer install --no-dev --optimize-autoloader
 
-      # Step 5: Build front-end assets if required
+      # Step 5: Build front-end assets
       - name: Build Assets
         run: |
           npm install
           npm run build
-      # Step 6: Sync changed files to the server via FTP
+
+      # Step 6: Sync files to server
       - name: Sync Files to Server
         uses: SamKirkLand/FTP-Deploy-Action@4.0.0
         with:
@@ -45,14 +46,15 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: /
-          local-dir: ./ # Ensures all updated files are deployed
+          local-dir: ./ # Deploy only updated files
 
-      # Step 7: Clear caches on the server
+      # Step 7: Clear cache on server
       - name: Clear Cache and Config
         run: |
           php artisan config:cache
           php artisan route:cache
           php artisan view:cache
-      # Step 8: Set permissions for storage and cache directories
+
+      # Step 8: Fix directory permissions
       - name: Fix Directory Permissions
         run: chmod -R 775 storage bootstrap/cache
