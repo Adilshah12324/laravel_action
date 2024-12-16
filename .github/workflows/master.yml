@@ -41,6 +41,13 @@ jobs:
       - name: Run Migrations and Seed
         run: |
           php artisan migrate:fresh --seed --force
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_DATABASE: ${{ secrets.DB_DATABASE }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       # Step 6: Sync files to server
       - name: Sync Files to Server
         uses: SamKirkLand/FTP-Deploy-Action@4.0.0
