@@ -16,3 +16,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/',[UserController::class,'index'])->name('all_users');
+Route::get('/user-delete/{id}',[UserController::class,'delete'])->name('delete_user');
