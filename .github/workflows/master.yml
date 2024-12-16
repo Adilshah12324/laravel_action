@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  master:
+  web-deploy:
     name: Deploy
     runs-on: ubuntu-latest
 
