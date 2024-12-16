@@ -37,10 +37,10 @@ jobs:
         run: |
           npm install
           npm run build
-          
+
       - name: Run Migrations and Seed
         run: |
-          php artisan migrate:fresh --seed
+          php artisan migrate:fresh --seed --force
       # Step 6: Sync files to server
       - name: Sync Files to Server
         uses: SamKirkLand/FTP-Deploy-Action@4.0.0
